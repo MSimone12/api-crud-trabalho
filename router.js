@@ -8,10 +8,12 @@ router.get('/', (req, res) => {
 
 router.post('/create', actions.create)
 
-router.put('/update/:id', actions.update)
+router.patch('/update/:id', actions.update)
 
 router.post('/delete/:id', actions.deleteById)
 
 router.get('/clientes', actions.listAll)
+
+router.get('/clientes/:id', actions.searchClient)
 
 module.exports = router

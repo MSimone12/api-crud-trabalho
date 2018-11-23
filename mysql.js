@@ -1,10 +1,18 @@
 const mysql = require('mysql')
 
 const connection = mysql.createConnection({
-    host: 'mysql995.umbler.com',
-    user: 'trabalho',
-    password: 'abc123456',
-    database: 'trabalho123'
+	host: 'localhost',
+	port: 3306,
+	user: 'root',
+	password: 'root',
+	database: 'trabalho'
 })
 
-module.exports = connection
+const execSQLQuery = (sql, res) => {
+	connection.query(sql, (error, results, fields) => {
+		console.log(typeof results)
+		error ? res.json(error) : res.json(results)
+	})
+}
+
+module.exports = execSQLQuery

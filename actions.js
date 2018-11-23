@@ -1,41 +1,51 @@
-const conn = require('./mysql')
-
-const insert = (name, cpf) => `INSERT INTO Clientes (Nome, CPF) values (${name}, ${cpf})`
-
-const execSQLQuery = (sql, res) => {
-    conn.query(sql, (error, results, fields) => {
-        error ? res.json(error) : res.json(results)
-    })
-  }
+const execSQLQuery = require('./mysql')
 
 const create = (req, res) => {
-    const body = req.body
-    if(!body.nome) return res.json({error: 10, msg: 'Faltando Nome'})
-    if(!body.cpf) return res.json({error: 10, msg: 'Faltando CPF'})
-    return execSQLQuery(insert(body.nome, body.cpf))
+	const nome = req.body.nome
+	const cpf = req.body.cpf
+	if (!nome) return res.json({
+		error: 10,
+		msg: 'Faltando Nome'
+	})
+	if (!cpf) return res.json({
+		error: 11,
+		msg: 'Faltando CPF'
+	})
+	return execSQLQuery(`INSERT INTO Clientes (Nome, CPF) values ('${nome}', '${cpf}')`, res)
 }
 
 const listAll = (req, res) => {
-    return execSQLQuery('Select * from Clientes', res)
+	return execSQLQuery('Select * from Clientes', res)
 }
 
 const update = (req, res) => {
-    const id = req.params.id
-    const name = req.body.nome
-    const cpf = req.body.cpf
-    if(!body.nome) return res.json({error: 10, msg: 'Faltando Nome'})
-    if(!body.cpf) return res.json({error: 10, msg: 'Faltando CPF'})
-    return execSQLQuery(`UPDATE Clientes SET Nome='${nome}' and CPF='${cpf}' WHERE ID=${id}`, res)
+	const id = parseInt(req.params.id)
+	if(!id) return res.status(400).json({error: 9, msg: 'Faltando Id'})
+	const name = req.body.nome
+	const cpf = req.body.cpf
+	if (!name && !cpf) return res.send({ error: 10,	msg: 'Requisição Inválida' })
+	let query = ''
+	if(!!name || !!cpf) {
+		query = query.concat('UPDATE Clientes SET ', name ? `Nome='${name}' ` : '', name && cpf ? ', ' : '', cpf ? `CPF='${cpf}' ` : '', `WHERE Id=${id}`)
+		return execSQLQuery(query, res)
+	}
+	return res.send('OK')
 }
 
 const deleteById = (req, res) => {
-    const id = req.params.id
-    return execSQLQuery(`DELETE FROM Clientes WHERE ID=${id}`)
+	const id = req.params.id
+	return execSQLQuery(`DELETE FROM Clientes WHERE Id=${id}`, res)
+}
+
+const searchClient = (req, res) => {
+	const id = req.params.id
+	return execSQLQuery(`select * from Clientes where Id=${id}`, res)
 }
 
 module.exports = {
-    create,
-    update,
-    deleteById, 
-    listAll
+	create,
+	update,
+	deleteById,
+	listAll,
+	searchClient
 }
