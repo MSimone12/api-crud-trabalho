@@ -6,8 +6,12 @@ router.get('/', (req, res) => {
     return res.json({taokei: 'taokei'})
 })
 
-router.get('/fodase', (req, res) => res.send('Fodase Mermao'))
-
 router.post('/create', actions.create)
+
+router.put('/update/:id', actions.update)
+
+router.post('/delete/:id', actions.deleteById)
+
+router.get('/clientes', actions.listAll)
 
 module.exports = router
