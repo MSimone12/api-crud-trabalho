@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
 
 router.post('/create', actions.create)
 
-router.patch('/update/:id', actions.update)
+router.put('/update/:id', actions.update)
 
 router.post('/delete/:id', actions.deleteById)
 

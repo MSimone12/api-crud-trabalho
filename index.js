@@ -1,10 +1,9 @@
 const express = require('express')
 const app = express()
-const mysql = require('mysql')
 const bodyParser = require('body-parser')
 const router = require('./router')
 
-const port = 3000
+const port = 3001
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
